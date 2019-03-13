@@ -37,7 +37,7 @@ class BuildingSearchSpider(scrapy.Spider):
                          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                          'Origin': 'https://bmis1.buildingmgt.gov.hk',
                          'Connection':'keep-alive',
-                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+                         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:65.0) Gecko/20100101 Firefox/65.0',
                          'Host': 'bmis1.buildingmgt.gov.hk',
                          'Accept': 'application/xml, text/xml, */*; q=0.01',
                          'Referer': 'https://bmis1.buildingmgt.gov.hk/bd_hadbiex/content/searchbuilding/building_search.jsf?renderedValue=true'},
@@ -52,7 +52,7 @@ class BuildingSearchSpider(scrapy.Spider):
                     '_bld_result_frm:_result_tbl_first':str(i * page_size),
                     '_bld_result_frm:_result_tbl_rows':str(page_size),
                     '_bld_result_frm:_result_tbl_encodeFeature':'true',
-                    '_bld_result_frm:_result_tbl_columnOrder':'_bld_result_frm:_result_tbl:j_id_4c,_bld_result_frm:_result_tbl:j_id_4i,_bld_result_frm:_result_tbl:j_id_4o',
+                    '_bld_result_frm:_result_tbl_columnOrder':'_bld_result_frm:_result_tbl:j_id_52,_bld_result_frm:_result_tbl:j_id_58,_bld_result_frm:_result_tbl:j_id_5e',
                     '_bld_result_frm_SUBMIT':'1',
                     'autoScroll':'',
                     'javax.faces.ViewState':view_state},
@@ -93,7 +93,7 @@ class BuildingSearchSpider(scrapy.Spider):
                              'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                              'Origin': 'https://bmis1.buildingmgt.gov.hk',
                              'Connection':'keep-alive',
-                             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+                             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:65.0) Gecko/20100101 Firefox/65.0',
                              'Host': 'bmis1.buildingmgt.gov.hk',
                              'Accept': 'application/xml, text/xml, */*; q=0.01',
                              'Referer': 'https://bmis1.buildingmgt.gov.hk/bd_hadbiex/content/searchbuilding/building_search.jsf?renderedValue=true',
@@ -113,7 +113,7 @@ class BuildingSearchSpider(scrapy.Spider):
 
     def parse_detail_page(self, response):
         soup = BeautifulSoup(response.body, "html.parser")
-        parent_div = soup.find('div', {'id': '_detail_form:j_id_2k_content'})
+        parent_div = soup.find('div', {'id': '_detail_form:j_id_3b_content'})
         output = {}
         for div in parent_div.find_all('div', {'class': 'col w2'}) + parent_div.find_all('div', {'class': 'col w1'}):
             label = div.find('div', {'class': 'label'}).text.strip()
@@ -123,7 +123,8 @@ class BuildingSearchSpider(scrapy.Spider):
         for td in soup.find_all('td', {'role': 'gridcell'}):
             k = k + 1
             output["address_" + str(k)] = td.text.strip()
-        organization_div = soup.find('div', {'id': '_detail_form:j_id_3r_content'})
+            print("\n\n\n{}\n\n\n".format(len(td.text.strip())))
+        organization_div = soup.find('div', {'id': '_detail_form:j_id_4i_content'})
         org_flattern = [org.text.strip() for org in organization_div.find_all('div', {'class': 'text'})]
         for i in range(0, len(org_flattern) // 2):
             output['org_type_' + str(i + 1)] = org_flattern[2 * i]

@@ -10,9 +10,12 @@ class BuildingSearchSpider(scrapy.Spider):
             buildings = json.loads(f.read())
             print(len(buildings))
             for b in buildings:
-                address = b["address_1"]
-                print(address)
-                yield self.request_als(address)
+                if "address_1" in b.keys():
+                    address = b["address_1"]
+                    # print(address)
+                    yield self.request_als(address)
+                else:
+                    yield self.request_als('{')
 
     def request_als(self, a):
         url = "https://www.als.ogcio.gov.hk/lookup?" + urllib.parse.urlencode({"q":a})
